@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMovieRequest;
 use App\Http\Requests\UpdateMovieRequest;
+use App\Http\Resources\MovieResource;
 use App\Services\MovieService;
 use Illuminate\Http\JsonResponse;
 
@@ -21,21 +22,21 @@ class MovieController extends Controller
     {
         $movies = $this->movieService->list(request()->all());
 
-        return response()->json($movies);
+        return response()->json(MovieResource::collection($movies->load('ageRating')));
     }
 
     public function store(StoreMovieRequest $request): JsonResponse
     {
         $movie = $this->movieService->create($request->validated());
 
-        return response()->json($movie, 201);
+        return response()->json(new MovieResource($movie->load('ageRating')), 201);
     }
 
     public function show(string $id): JsonResponse
     {
         $movie = $this->movieService->find($id);
 
-        return response()->json($movie);
+        return response()->json(new MovieResource($movie->load('ageRating')));
     }
 
     public function update(UpdateMovieRequest $request, string $id): JsonResponse
@@ -43,7 +44,7 @@ class MovieController extends Controller
         $movie = $this->movieService->find($id);
         $updated = $this->movieService->update($movie, $request->validated());
 
-        return response()->json($updated);
+        return response()->json(new MovieResource($updated->load('ageRating')));
     }
 
     public function destroy(string $id): JsonResponse
