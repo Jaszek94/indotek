@@ -27,4 +27,22 @@ class UpdateMovieRequest extends FormRequest
             'age_rating_id' => 'required|exists:age_ratings,id',
         ];
     }
+
+    /**
+     * Get custom error messages for validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'title.required' => 'A cím megadása kötelező.',
+            'title.string' => 'A címnek szövegesnek kell lennie.',
+            'title.max' => 'A cím nem lehet hosszabb 255 karakternél.',
+            'description.required' => 'A leírás megadása kötelező.',
+            'description.string' => 'A leírásnak szövegesnek kell lennie.',
+            'age_rating_id.required' => 'Az életkori besorolás megadása kötelező.',
+            'age_rating_id.exists' => 'Az életkori besorolás érvénytelen.',
+        ];
+    }
 }
