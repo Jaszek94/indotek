@@ -4,11 +4,14 @@ namespace Tests\Unit;
 
 use App\Http\Requests\StoreMovieRequest;
 use App\Models\AgeRating;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
 class StoreMovieRequestTest extends TestCase
 {
+    use RefreshDatabase;
+
     private function validate(array $data)
     {
         $request = new StoreMovieRequest();
