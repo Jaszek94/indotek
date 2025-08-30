@@ -34,8 +34,8 @@ class MovieService
         return $this->movieRepository->update($movie, $data);
     }
 
-    public function delete(Movie $movie): void
+    public function delete(Movie $movie): bool
     {
-        $this->movieRepository->delete($movie);
+        return $this->movieRepository->delete($movie);
     }
 }

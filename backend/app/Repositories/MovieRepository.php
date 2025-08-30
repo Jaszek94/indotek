@@ -34,8 +34,8 @@ class MovieRepository implements MovieRepositoryInterface
         return $movie->load('ageRating');
     }
 
-    public function delete(Movie $movie): void
+    public function delete(Movie $movie): bool
     {
-        $movie->delete();
+        return $movie->delete();
     }
 }
