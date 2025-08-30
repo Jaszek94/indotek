@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AgeRatingResource;
 use App\Services\AgeRatingService;
 
 class AgeRatingController extends Controller
@@ -21,6 +22,6 @@ class AgeRatingController extends Controller
     {
         $ageRatings = $this->ageRatingService->list();
 
-        return response()->json($ageRatings);
+        return response()->json(AgeRatingResource::collection($ageRatings));
     }
 }
