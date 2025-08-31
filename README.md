@@ -1,4 +1,4 @@
-# Indotek próbafeladat
+# Próbafeladat
 
 Ez a projekt egy **Laravel (backend)** és **Next.js (frontend)** alapú alkalmazás, amely Docker és Laravel Sail segítségével futtatható.
 
