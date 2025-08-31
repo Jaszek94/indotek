@@ -6,8 +6,8 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
-export default function ViewMoviePage({ params }: Props) {
+export default function EditMoviePage({ params }: Props) {
   const { id } = use(params); // most már simán elérhető az id
 
-  return <div>View Movie Page for ID: {id}</div>;
+  return <div>Edit Movie Page for ID: {id}</div>;
 }
