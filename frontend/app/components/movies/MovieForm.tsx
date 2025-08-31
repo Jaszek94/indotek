@@ -4,10 +4,22 @@ import { MoviePayload } from '@/app/types/movie';
 import { useState, useEffect } from 'react';
 import Form from '../ui/Form';
 import FormInput from '../ui/FormInput';
-import { useAgeRatings, useCreateMovie } from '@/app/hooks/useMovies';
 import SelectInput from '../ui/SelectInput';
+import { useAgeRatings } from '@/app/hooks/useMovies';
 
-export default function MovieForm() {
+type Props = {
+  initialData?: MoviePayload;
+  onSubmit: (data: MoviePayload) => void;
+  isPending?: boolean;
+  isError?: boolean;
+};
+
+export default function MovieForm({
+  initialData,
+  onSubmit,
+  isPending,
+  isError,
+}: Props) {
   const { data: ageRatings, isLoading: isAgeLoading } = useAgeRatings();
   const [form, setForm] = useState<MoviePayload>({
     title: '',
@@ -15,16 +27,17 @@ export default function MovieForm() {
     age_rating_id: 0,
   });
 
-  const { mutate, isPending, isError } = useCreateMovie();
-
+  // Ha van kezdeti adat, állítsuk be
   useEffect(() => {
-    if (ageRatings && ageRatings.length > 0) {
+    if (initialData) {
+      setForm(initialData);
+    } else if (ageRatings && ageRatings.length > 0) {
       setForm((prev) => ({
         ...prev,
         age_rating_id: ageRatings[0].id,
       }));
     }
-  }, [ageRatings]);
+  }, [initialData, ageRatings]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -38,13 +51,10 @@ export default function MovieForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    mutate(form);
+    onSubmit(form);
   };
 
-  // Ha még nem töltődött be, semmi ne renderelődjön
-  if (isAgeLoading || !ageRatings) {
-    return null;
-  }
+  if (isAgeLoading || !ageRatings) return null;
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -65,10 +75,7 @@ export default function MovieForm() {
         name="age_rating_id"
         value={form.age_rating_id}
         onChange={handleChange}
-        options={ageRatings.map((ar) => ({
-          value: ar.id,
-          label: ar.name,
-        }))}
+        options={ageRatings.map((ar) => ({ value: ar.id, label: ar.name }))}
       />
 
       <button
@@ -76,10 +83,10 @@ export default function MovieForm() {
         disabled={isPending}
         className="px-4 py-2 bg-primary-light text-white rounded-lg hover:bg-primary-dark transition"
       >
-        {isPending ? 'Creating...' : 'Create Movie'}
+        {isPending ? 'Saving...' : 'Save Movie'}
       </button>
 
-      {isError && <div className="text-red-600">Error creating movie.</div>}
+      {isError && <div className="text-red-600">Error saving movie.</div>}
     </Form>
   );
 }
