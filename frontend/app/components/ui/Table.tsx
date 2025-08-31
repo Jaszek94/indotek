@@ -34,7 +34,10 @@ export function Table<T>({ columns, data, rowKey }: TableProps<T>) {
         </thead>
         <tbody className="divide-y divide-gray-200">
           {data.map((row) => (
-            <tr key={String(row[rowKey])} className="hover:bg-gray-50">
+            <tr
+              key={String(row[rowKey])}
+              className="transition duration-200 hover:bg-gray-50"
+            >
               {columns.map((col, i) => {
                 const value =
                   typeof col.accessor === 'function'
