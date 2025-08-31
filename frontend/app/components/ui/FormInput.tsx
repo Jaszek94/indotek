@@ -6,6 +6,7 @@ type Props = {
   value: string | number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   type?: string;
+  error?: string;
 };
 
 export default function FormInput({
@@ -14,6 +15,7 @@ export default function FormInput({
   value,
   onChange,
   type = 'text',
+  error,
 }: Props) {
   return (
     <div className="flex flex-col space-y-1">
@@ -26,8 +28,11 @@ export default function FormInput({
         type={type}
         value={value}
         onChange={onChange}
-        className="px-3 py-2 text-gray-600 border border-gray-300 rounded-lg focus:outline-none"
+        className={`px-3 py-2 text-gray-600 border rounded-lg focus:outline-none ${
+          error ? 'border-red-500' : 'border-gray-300'
+        }`}
       />
+      {error && <span className="text-sm text-red-600">{error}</span>}
     </div>
   );
 }

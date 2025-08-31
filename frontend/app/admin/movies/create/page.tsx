@@ -1,14 +1,23 @@
 'use client';
 
+import { useState } from 'react';
 import MovieForm from '@/app/components/movies/MovieForm';
 import { useCreateMovie } from '@/app/hooks/useMovies';
 import { MoviePayload } from '@/app/types/movie';
 
 export default function CreateMoviePage() {
   const { mutate, isPending, isError } = useCreateMovie();
+  const [apiErrors, setApiErrors] = useState<Record<string, string[]>>({});
 
   const handleSubmit = (formData: MoviePayload) => {
-    mutate(formData);
+    setApiErrors({}); // reseteljük a hibákat minden próbánál
+    mutate(formData, {
+      onError: (err: any) => {
+        if (err?.response?.data?.errors) {
+          setApiErrors(err.response.data.errors);
+        }
+      },
+    });
   };
 
   return (
@@ -21,6 +30,7 @@ export default function CreateMoviePage() {
         onSubmit={handleSubmit}
         isPending={isPending}
         isError={isError}
+        apiErrors={apiErrors}
       />
     </div>
   );

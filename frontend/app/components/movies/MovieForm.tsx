@@ -12,6 +12,7 @@ type Props = {
   onSubmit: (data: MoviePayload) => void;
   isPending?: boolean;
   isError?: boolean;
+  apiErrors?: Record<string, string[]>;
 };
 
 export default function MovieForm({
@@ -19,6 +20,7 @@ export default function MovieForm({
   onSubmit,
   isPending,
   isError,
+  apiErrors = {},
 }: Props) {
   const { data: ageRatings, isLoading: isAgeLoading } = useAgeRatings();
   const [form, setForm] = useState<MoviePayload>({
@@ -27,7 +29,6 @@ export default function MovieForm({
     age_rating_id: 0,
   });
 
-  // Ha van kezdeti adat, állítsuk be
   useEffect(() => {
     if (initialData) {
       setForm(initialData);
@@ -63,12 +64,14 @@ export default function MovieForm({
         name="title"
         value={form.title}
         onChange={handleChange}
+        error={apiErrors.title?.[0]}
       />
       <FormInput
         label="Description"
         name="description"
         value={form.description}
         onChange={handleChange}
+        error={apiErrors.description?.[0]}
       />
       <SelectInput
         label="Age Rating"
@@ -77,6 +80,11 @@ export default function MovieForm({
         onChange={handleChange}
         options={ageRatings.map((ar) => ({ value: ar.id, label: ar.name }))}
       />
+      {apiErrors.age_rating_id && (
+        <span className="text-sm text-red-600">
+          {apiErrors.age_rating_id[0]}
+        </span>
+      )}
 
       <button
         type="submit"
@@ -86,7 +94,9 @@ export default function MovieForm({
         {isPending ? 'Saving...' : 'Save Movie'}
       </button>
 
-      {isError && <div className="text-red-600">Error saving movie.</div>}
+      {isError && !Object.keys(apiErrors).length && (
+        <div className="text-red-600 mt-2">Error saving movie.</div>
+      )}
     </Form>
   );
 }

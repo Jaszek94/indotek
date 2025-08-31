@@ -1,6 +1,6 @@
 'use client';
 
-import { use } from 'react'; // új React.use hook
+import { useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMovie, useUpdateMovie } from '@/app/hooks/useMovies';
 import MovieForm from '@/app/components/movies/MovieForm';
@@ -17,15 +17,23 @@ export default function EditMoviePage({ params }: Props) {
   const { data: movie, isLoading, isError } = useMovie(Number(id));
   const { mutate, isPending, isError: isMutateError } = useUpdateMovie();
 
+  const [apiErrors, setApiErrors] = useState<Record<string, string[]>>({});
+
   if (isLoading) return <div>Loading...</div>;
   if (isError || !movie) return <div>Error loading movie.</div>;
 
   const handleSubmit = (data: MoviePayload) => {
+    setApiErrors({});
     mutate(
       { id: movie.id, ...data },
       {
         onSuccess: () => {
           router.push('/admin/movies');
+        },
+        onError: (err: any) => {
+          if (err?.response?.data?.errors) {
+            setApiErrors(err.response.data.errors);
+          }
         },
       }
     );
@@ -43,6 +51,7 @@ export default function EditMoviePage({ params }: Props) {
         onSubmit={handleSubmit}
         isPending={isPending}
         isError={isMutateError}
+        apiErrors={apiErrors}
       />
     </div>
   );
