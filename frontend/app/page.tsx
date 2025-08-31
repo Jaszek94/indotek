@@ -14,7 +14,7 @@ export default function Home() {
         </h2>
         <p className="text-gray-600 mb-6">Üdvözlöm a próbafeladaton!</p>
         <Link
-          href="/admin"
+          href="/admin/movies"
           className="inline-block px-8 py-3 bg-primary text-white rounded-lg shadow-lg hover:bg-primary-dark transition"
         >
           Admin
