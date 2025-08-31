@@ -40,6 +40,31 @@ export const useCreateMovie = () => {
   });
 };
 
+export const useMovie = (id: number) => {
+  return useQuery<Movie>({
+    queryKey: ['movie', id],
+    queryFn: async () => {
+      const { data } = await api.get(`/movies/${id}`);
+      return data;
+    },
+    enabled: !!id,
+  });
+};
+
+export const useUpdateMovie = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (movie: MoviePayload & { id: number }) => {
+      const { data } = await api.put(`/movies/${movie.id}`, movie);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['movies'] });
+    },
+  });
+};
+
 export const useDeleteMovie = () => {
   const queryClient = useQueryClient();
 
