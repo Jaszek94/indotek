@@ -1,7 +1,17 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../lib/api';
-import { Movie, MoviePayload } from '../types/movie';
+import { AgeRating, Movie, MoviePayload } from '../types/movie';
 import { useRouter } from 'next/navigation';
+
+export const useAgeRatings = () => {
+  return useQuery<AgeRating[]>({
+    queryKey: ['age-ratings'],
+    queryFn: async () => {
+      const { data } = await api.get('/age-ratings');
+      return data;
+    },
+  });
+};
 
 // Fetch all movies
 export const useMovies = () => {

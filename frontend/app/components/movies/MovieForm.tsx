@@ -1,21 +1,34 @@
 'use client';
 
 import { MoviePayload } from '@/app/types/movie';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Form from '../ui/Form';
 import FormInput from '../ui/FormInput';
-import { useCreateMovie } from '@/app/hooks/useMovies';
+import { useAgeRatings, useCreateMovie } from '@/app/hooks/useMovies';
+import SelectInput from '../ui/SelectInput';
 
 export default function MovieForm() {
+  const { data: ageRatings, isLoading: isAgeLoading } = useAgeRatings();
   const [form, setForm] = useState<MoviePayload>({
     title: '',
     description: '',
-    age_rating_id: 1, // dummy default
+    age_rating_id: 0,
   });
 
   const { mutate, isPending, isError } = useCreateMovie();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    if (ageRatings && ageRatings.length > 0) {
+      setForm((prev) => ({
+        ...prev,
+        age_rating_id: ageRatings[0].id,
+      }));
+    }
+  }, [ageRatings]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setForm((prev) => ({
       ...prev,
@@ -28,8 +41,13 @@ export default function MovieForm() {
     mutate(form);
   };
 
+  // Ha még nem töltődött be, semmi ne renderelődjön
+  if (isAgeLoading || !ageRatings) {
+    return null;
+  }
+
   return (
-    <Form onSubmit={handleSubmit} className="">
+    <Form onSubmit={handleSubmit}>
       <FormInput
         label="Title"
         name="title"
@@ -42,12 +60,15 @@ export default function MovieForm() {
         value={form.description}
         onChange={handleChange}
       />
-      <FormInput
-        label="Age Rating ID"
+      <SelectInput
+        label="Age Rating"
         name="age_rating_id"
         value={form.age_rating_id}
         onChange={handleChange}
-        type="number"
+        options={ageRatings.map((ar) => ({
+          value: ar.id,
+          label: ar.name,
+        }))}
       />
 
       <button
