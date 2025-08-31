@@ -10,3 +10,9 @@ export type Movie = {
   description: string;
   age_rating: AgeRating;
 };
+
+export type MoviePayload = {
+  title: string;
+  description: string;
+  age_rating_id: number;
+};

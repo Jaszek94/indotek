@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../lib/api';
-import { Movie } from '../types/movie';
+import { Movie, MoviePayload } from '../types/movie';
+import { useRouter } from 'next/navigation';
 
 // Fetch all movies
 export const useMovies = () => {
@@ -9,6 +10,22 @@ export const useMovies = () => {
     queryFn: async () => {
       const { data } = await api.get('/movies');
       return data;
+    },
+  });
+};
+
+export const useCreateMovie = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: async (movie: MoviePayload) => {
+      const { data } = await api.post('/movies', movie);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['movies'] });
+      router.push('/admin/movies');
     },
   });
 };
