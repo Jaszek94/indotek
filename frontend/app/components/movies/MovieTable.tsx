@@ -2,13 +2,7 @@
 
 import Link from 'next/link';
 import { Table } from '../ui/Table';
-
-type Movie = {
-  id: number;
-  title: string;
-  year: number;
-  age_rating: string;
-};
+import { Movie } from '@/app/types/movie';
 
 type Props = {
   movies: Movie[];
@@ -18,8 +12,11 @@ export default function MovieTable({ movies }: Props) {
   const columns = [
     { header: 'ID', accessor: 'id' as const },
     { header: 'Title', accessor: 'title' as const },
-    { header: 'Year', accessor: 'year' as const },
-    { header: 'Age Rating', accessor: 'age_rating' as const },
+    { header: 'Description', accessor: 'description' as const },
+    {
+      header: 'Age Rating',
+      accessor: (movie: Movie) => movie.age_rating.code,
+    },
     {
       header: 'Actions',
       accessor: (movie: Movie) => (

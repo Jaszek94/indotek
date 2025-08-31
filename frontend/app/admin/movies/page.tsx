@@ -1,16 +1,11 @@
 'use client';
 
 import MovieTable from '@/app/components/movies/MovieTable';
+import { useMovies } from '@/app/hooks/useMovies';
 import Link from 'next/link';
 
 export default function ListMoviesPage() {
-  // Példa adatok
-  const movies = [
-    { id: 1, title: 'Inception', year: 2010, age_rating: 'PG-13' },
-    { id: 2, title: 'The Matrix', year: 1999, age_rating: 'PG-13' },
-    { id: 3, title: 'Interstellar', year: 2014, age_rating: 'PG-13' },
-    { id: 4, title: 'Dunkirk', year: 2017, age_rating: 'PG-13' },
-  ];
+  const { data: movies, isLoading, isError } = useMovies();
 
   return (
     <div className="space-y-6">
@@ -24,7 +19,15 @@ export default function ListMoviesPage() {
         </Link>
       </div>
 
-      <MovieTable movies={movies} />
+      {isLoading ? (
+        <div className="py-10 text-center text-gray-500">Loading...</div>
+      ) : isError ? (
+        <div className="py-10 text-center text-red-600">
+          Error loading movies.
+        </div>
+      ) : (
+        <MovieTable movies={movies || []} />
+      )}
     </div>
   );
 }
