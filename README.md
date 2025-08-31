@@ -89,6 +89,8 @@ Hozz létre egy .env.local fájlt a frontend mappában, majd add hozzá:
 NEXT_PUBLIC_API_BASE_URL=http://localhost/api
 ```
 
+---
+
 ### Megjegyzés
 
 A projekt jelenleg Laravel Sail segítségével fut Dockerben PostgreSQL adatbázissal.
