@@ -1,11 +1,21 @@
 'use client';
 
 import MovieTable from '@/app/components/movies/MovieTable';
-import { useMovies } from '@/app/hooks/useMovies';
+import { useDeleteMovie, useMovies } from '@/app/hooks/useMovies';
 import Link from 'next/link';
 
 export default function ListMoviesPage() {
   const { data: movies, isLoading, isError } = useMovies();
+  const { mutate: deleteMovie, isPending: isDeleting } = useDeleteMovie();
+
+  const handleDelete = (id: number) => {
+    const confirmDelete = window.confirm(
+      'Are you sure you want to delete this movie?'
+    );
+    if (confirmDelete) {
+      deleteMovie(id);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -26,7 +36,11 @@ export default function ListMoviesPage() {
           Error loading movies.
         </div>
       ) : (
-        <MovieTable movies={movies || []} />
+        <MovieTable
+          movies={movies || []}
+          onDelete={handleDelete}
+          isDeleting={isDeleting}
+        />
       )}
     </div>
   );

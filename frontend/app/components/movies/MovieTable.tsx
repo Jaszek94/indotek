@@ -6,9 +6,11 @@ import { Movie } from '@/app/types/movie';
 
 type Props = {
   movies: Movie[];
+  onDelete?: (id: number) => void;
+  isDeleting?: boolean;
 };
 
-export default function MovieTable({ movies }: Props) {
+export default function MovieTable({ movies, onDelete, isDeleting }: Props) {
   const columns = [
     { header: 'ID', accessor: 'id' as const },
     { header: 'Title', accessor: 'title' as const },
@@ -27,7 +29,15 @@ export default function MovieTable({ movies }: Props) {
           >
             Edit
           </Link>
-          <button className="text-red-600 hover:underline">Delete</button>
+          {onDelete && (
+            <button
+              onClick={() => onDelete(movie.id)}
+              disabled={isDeleting}
+              className="text-red-600 hover:underline"
+            >
+              Delete
+            </button>
+          )}
         </div>
       ),
     },

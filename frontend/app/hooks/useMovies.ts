@@ -29,3 +29,16 @@ export const useCreateMovie = () => {
     },
   });
 };
+
+export const useDeleteMovie = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: number) => {
+      await api.delete(`/movies/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['movies'] });
+    },
+  });
+};
