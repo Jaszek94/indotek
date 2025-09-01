@@ -83,6 +83,7 @@ npm install
 ```
 
 Környezeti változók:
+
 Hozz létre egy .env.local fájlt a frontend mappában, majd add hozzá:
 
 ```bash
