@@ -94,6 +94,6 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost/api
 ### Megjegyzés
 
 A projekt jelenleg Laravel Sail segítségével fut Dockerben PostgreSQL adatbázissal.
-A docker-compose.yml fájl elkészítésére nem maradt időm, mert a backendre fektettem nagyobb hangsúlyt.
+A docker-compose.yml fájl elkészítésére nem maradt időm, mert a backendre fektettem nagyobb hangsúlyt. Szintén kimaradt frontend oldalon a szűrési lehetőség. Ezt a backend szintén támogatja. A frontenden is tervbe volt, főképp ezért is lett kiszervezve az egész egy select komponensbe.
 A frontend részen a TypeScript újdonságként némi nehézséget okozott, de igyekeztem a lehető legtöbbet kihozni a feladatból.
 Remélem, a megoldás összességében megfelel az elvárásoknak, és jól tükrözi a tudásomat.
